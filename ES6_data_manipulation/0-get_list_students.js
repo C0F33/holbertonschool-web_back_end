@@ -1,10 +1,11 @@
-const Student = {
-   contructor(id, firstName, location) {
-    this.id = id;
-    this.firstName = firstName;
-    this.location = location;
+class Student {
+    constructor(id, firstName, location) {
+        this.id = id;
+        this.firstName = firstName;
+        this.location = location;
     }
 }
+
 const getListStudents = () => [
 new Student(1, 'Guillaume', 'San Francisco'),
 new Student(2, 'James', 'Columbia'),
