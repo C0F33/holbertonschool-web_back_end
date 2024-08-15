@@ -4,9 +4,6 @@ wait_random = __import__('0-basic_async_syntax').wait_random
 """Coroutines"""
 async def wait_n(n: int, max_delay: int):
     """COroutines"""
-    delays = []
-    tasks = [wait_random(max_delay) for _ in range(n)];
-    results = await asyncio.gather(*tasks)
+    delays = [wait_random(max_delay) for _ in range(n)]
+    return [await delay for delay in asyncio.as_completed(delays)]
 
-    delays.extend(results)
-    return sorted(delays)
