@@ -5,8 +5,8 @@ wait_n = __import__ ("1-concurrent_coroutines").wait_n
 
 def measure_time(n: int, max_delay: int) -> float:
     """Try this"""
-    start = current_time()
+    start_time = current_time()
     run(wait_n(n, max_delay))
-    end = current_time()
-    total_time = (end - start)
-    return (total_time / n)
+    end_time = current_time()
+    total_time = end_time - start_time
+    return total_time / n
