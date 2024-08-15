@@ -6,7 +6,7 @@
 
     wait_n should return the list of all the delays (float values).
     The list of the delays should be in ascending order without
-    using sort() because of concurrency.
+    sort() because of concurrency.
 """
 import asyncio
 import random
