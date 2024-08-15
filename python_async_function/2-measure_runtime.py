@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from time import time as current_time
 from asyncio import run
 """Module"""
