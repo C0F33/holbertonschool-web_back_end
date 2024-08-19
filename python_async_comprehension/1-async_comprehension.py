@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from typing import List
 """async functionImport async_generator from the previous task and
 then write a coroutine called async_comprehension that takes no arguments.
 The coroutine will collect 10 random numbers using an async comprehensing
