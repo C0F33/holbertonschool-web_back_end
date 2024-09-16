@@ -1,31 +1,22 @@
-const fs = require('fs');
+const readline = require('readline');
 
-function countStudents(path) {
-    try {
-        const data = fs.readFileSync(path, 'utf8');
-        const lines = data.split('\n').filter(line => line.trim() !== '');
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
 
-        if (lines.length <= 1) {
-            console.log('Number of students: 0');
-            return;
-        }
+const question = (query) => {
+    return new Promise((resolve) => rl.question(query, resolve));
+};
 
-        const headers = lines[0].split(',');
-        const students = lines.slice(1).map(line => line.split(','));
+(async () => {
+    console.log('Welcome to Holberton School, what is your name?');
+    const name = await question('');
+    console.log(`Your name is: ${name}`);
+    rl.close();
+})();
 
-        const fields = students.reduce((acc, student) => {
-            const field = student[headers.indexOf('field')];
-            const firstName = student[headers.indexOf('firstname')];
-            if (!acc[field]) acc[field] = [];
-            acc[field].push(firstName);
-            return acc;
-        }, {});
-
-        console.log(`Number of students: ${students.length}`);
-        for (const [field, names] of Object.entries(fields)) {
-            console.log(`Number of students in ${field}: ${names.length}. List: ${names.join(', ')}`);
-        }
-    } catch (err) {
-        throw new Error('Cannot load the database');
-    }
-}
+rl.on('close', () => {
+    console.log('This important software is now closing');
+    process.exit(0);
+});
