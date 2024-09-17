@@ -1,20 +1,41 @@
-const readline = require('readline');
+const fs = require('fs');
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
+function countStudents(path) {
+  let content;
 
-console.log('Welcome to Holberton School, what is your name?');
+  try {
+    content = fs.readFileSync(path);
+  } catch (err) {
+    throw new Error('Cannot load the database');
+  }
 
-rl.question('', (name) => {
+  content = content.toString().split('\n');
 
-  console.log(`Your name is: ${name}`);
+  let students = content.filter((item) => item);
 
-  rl.close();
-});
+  students = students.map((item) => item.split(','));
 
-rl.on('close', () => {
+  const NUMBER_OF_STUDENTS = students.length ? students.length - 1 : 0;
+  console.log(`Number of students: ${NUMBER_OF_STUDENTS}`);
 
-  console.log('This important software is now closing');
-});
+  const fields = {};
+  for (const i in students) {
+    if (i !== 0) {
+      if (!fields[students[i][3]]) fields[students[i][3]] = [];
+
+      fields[students[i][3]].push(students[i][0]);
+    }
+  }
+
+  delete fields.field;
+
+  for (const key of Object.keys(fields)) {
+    console.log(
+      `Number of students in ${key}: ${fields[key].length}. List: ${fields[
+        key
+      ].join(', ')}`,
+    );
+  }
+}
+
+module.exports = countStudents;
