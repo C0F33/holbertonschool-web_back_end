@@ -1,29 +1,49 @@
-const express = require('express');
+import readDatabase from '../utils';
 
-const args = process.argv.slice(2);
-const countStudents = require('./3-read_file_async');
+class StudentsController {
+  static getAllStudents(request, response, DATABASE) {
+    readDatabase(DATABASE)
+      .then((fields) => {
+        const students = [];
+        // let count = 0;
+        let msg;
 
-const DATABASE = args[0];
+        // for (const key of Object.keys(fields)) {
+        //   count += fields[key].length;
+        // }
 
-const app = express();
-const port = 1245;
+        // students.push(`Number of students: ${count}`);
+        students.push('This is the list of our students');
 
-app.get('/', (req, res) => {
-  res.send('Hello Holberton School!');
-});
+        for (const key of Object.keys(fields)) {
+          msg = `Number of students in ${key}: ${
+            fields[key].length
+          }. List: ${fields[key].join(', ')}`;
 
-app.get('/students', async (req, res) => {
-  const msg = 'This is the list of our students\n';
-  try {
-    const students = await countStudents(DATABASE);
-    res.send(`${msg}${students.join('\n')}`);
-  } catch (error) {
-    res.send(`${msg}${error.message}`);
+          students.push(msg);
+        }
+        response.send(200, `${students.join('\n')}`);
+      })
+      .catch(() => {
+        response.send(500, 'Cannot load the database');
+      });
   }
-});
 
-app.listen(port, () => {
-  //   console.log(`Example app listening at http://localhost:${port}`);
-});
+  static getAllStudentsByMajor(request, response, DATABASE) {
+    const { major } = request.params;
 
-module.exports = app;
+    if (major !== 'CS' && major !== 'SWE') {
+      response.send(500, 'Major parameter must be CS or SWE');
+    } else {
+      readDatabase(DATABASE)
+        .then((fields) => {
+          const students = fields[major];
+
+          response.send(200, `List: ${students.join(', ')}`);
+        })
+        .catch(() => response.send(500, 'Cannot load the database'));
+    }
+  }
+}
+
+export default StudentsController;
